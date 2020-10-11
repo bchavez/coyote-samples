@@ -71,4 +71,19 @@ namespace Actors
          }
       }
    }
+
+
+   public static class ExtensionsForAsync
+   {
+      public static AwaitableEventGroup<T> SetResult<T>(this Actor actor, T t)
+      {
+         if( actor.CurrentEventGroup is AwaitableEventGroup<T> awaiter )
+         {
+            awaiter.TrySetResult(t);
+            return awaiter;
+         }
+
+         throw new InvalidOperationException($"There is no {nameof(AwaitableEventGroup<T>)} for this actor.");
+      }
+   }
 }
